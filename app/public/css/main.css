@@ -1,8 +1,16 @@
 body {
-  padding-top: 50px;
-}
+  padding-top: 50px; }
 
 .starter-template {
   padding: 40px 15px;
-  text-align: center;
-}
+  text-align: center; }
+
+.node {
+  opacity: 0.5; }
+
+.node:hover {
+  opacity: 1; }
+
+.link {
+  stroke: #999999;
+  stroke-opacity: 0.3; }

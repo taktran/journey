@@ -82,6 +82,7 @@ module.exports = function (grunt) {
       unitTestFiles: [
         // Vendor code
         'app/public/vendor/jquery/jquery.min.js',
+        'app/public/vendor/d3/d3.min.js',
 
         // App code
         'app/public/js/*.js',

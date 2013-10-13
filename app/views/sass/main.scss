@@ -1,3 +1,5 @@
+$graph-link-color: #999;
+
 body {
   padding-top: 50px;
 }
@@ -5,4 +7,17 @@ body {
 .starter-template {
   padding: 40px 15px;
   text-align: center;
+}
+
+.node {
+  opacity: 0.5;
+}
+
+.node:hover {
+  opacity: 1;
+}
+
+.link {
+  stroke: $graph-link-color;
+  stroke-opacity: 0.3;
 }

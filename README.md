@@ -1,5 +1,7 @@
 # Journey
 
+Code for "[A journey through modern day web development](https://slid.es/taktran/modern-day-web-dev)" presentation.
+
 A website built using [generator-starttter](https://github.com/taktran/generator-starttter).
 
 ## Development

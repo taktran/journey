@@ -17,6 +17,7 @@
       .attr('height', height);
 
   var node, link;
+  var app = {};
 
   var voronoi = d3.geom.voronoi()
       .x(function(d) { return d.x; })
@@ -84,6 +85,12 @@
           .data( data.nodes )
         .enter().append('g')
           .attr('title', name)
+          .attr('data-id', function(d, i) {
+            return i;
+          })
+          .attr('data-group', function(d, i) {
+            return d.group;
+          })
           .attr('class', 'node')
           .call( force.drag );
 
@@ -100,7 +107,35 @@
           .nodes( data.nodes )
           .links( data.links )
           .start();
+
+      app.data = data;
     }
+  });
+
+  $(function() {
+    $(".node").click(function() {
+      var id = $(this).data("id");
+      var group = $(this).data("group");
+      console.log(id, group, this);
+
+      // New node
+      app.data.nodes.push({
+        name: "new",
+        group: group
+      });
+
+      // Connect new node to the clicked node
+      // app.data.links.push({
+      //   source: id,
+      //   target: app.data.nodes.length,
+      //   value: 0
+      // });
+
+      force.start();
+    });
+
+    // Expose data for debugging
+    window.app = app;
   });
 
 })();

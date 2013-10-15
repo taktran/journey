@@ -142,6 +142,14 @@ module.exports = function (grunt) {
         files: '<%= app.sassDir %>/*.scss',
         tasks: ['sass']
       },
+      json: {
+        files: [
+          '<%= app.publicBase %>/*.json'
+        ],
+        options: {
+          livereload: '<%= app.liveReloadPort %>'
+        }
+      },
       html: {
         files: [
           '<%= app.publicBase %>/*.html',

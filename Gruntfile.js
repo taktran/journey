@@ -73,6 +73,11 @@ module.exports = function (grunt) {
           '<%= app.publicBase %>/js/**/*.js'
         ]
       },
+      json: {
+        src: [
+          '<%= app.publicBase %>/*.json'
+        ]
+      },
       test: {
         src: ['test/unit/*.js']
       }
@@ -136,16 +141,15 @@ module.exports = function (grunt) {
       },
       test: {
         files: '<%= jshint.test.src %>',
-        tasks: ['jshint', 'karma:unit:run']
+        tasks: ['jshint:test', 'karma:unit:run']
       },
       css: {
         files: '<%= app.sassDir %>/*.scss',
         tasks: ['sass']
       },
       json: {
-        files: [
-          '<%= app.publicBase %>/*.json'
-        ],
+        files: '<%= jshint.json.src %>',
+        tasks: ['jshint:json'],
         options: {
           livereload: '<%= app.liveReloadPort %>'
         }

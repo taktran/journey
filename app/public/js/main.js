@@ -68,7 +68,7 @@
         .attr('d', function(d) { return 'M'+d.join(',')+'Z'; });
   });
 
-  d3.json('miserables.json', function(err, data) {
+  d3.json('mini.json', function(err, data) {
     if (data) {
       data.nodes.forEach(function(d, i) {
         d.id = i;

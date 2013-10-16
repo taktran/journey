@@ -103,6 +103,27 @@
           .attr('r', 4)
           .attr('stroke', 'black');
 
+      node.on('click', function() {
+        var id = $(this).data("id");
+        var group = $(this).data("group");
+        console.log(id, group, this);
+
+        // New node
+        app.data.nodes.push({
+          name: "new",
+          group: group
+        });
+
+        // Connect new node to the clicked node
+        // app.data.links.push({
+        //   source: id,
+        //   target: app.data.nodes.length,
+        //   value: 0
+        // });
+
+        // force.start();
+      });
+
       force
           .nodes( data.nodes )
           .links( data.links )
@@ -113,27 +134,6 @@
   });
 
   $(function() {
-    $(".node").click(function() {
-      var id = $(this).data("id");
-      var group = $(this).data("group");
-      console.log(id, group, this);
-
-      // New node
-      app.data.nodes.push({
-        name: "new",
-        group: group
-      });
-
-      // Connect new node to the clicked node
-      // app.data.links.push({
-      //   source: id,
-      //   target: app.data.nodes.length,
-      //   value: 0
-      // });
-
-      force.start();
-    });
-
     // Expose data for debugging
     window.app = app;
   });

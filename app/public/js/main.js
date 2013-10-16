@@ -108,19 +108,17 @@
       console.log(id, group, this);
 
       // New node
-      app.data.nodes.push({
+      data.nodes.push({
         name: "new",
         group: group
       });
 
       // Connect new node to the clicked node
-      // app.data.links.push({
-      //   source: id,
-      //   target: app.data.nodes.length,
-      //   value: 0
-      // });
-
-      // force.start();
+      data.links.push({
+        source: id,
+        target: data.nodes.length,
+        value: 0
+      });
     });
 
     force

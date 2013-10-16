@@ -69,67 +69,71 @@
         .attr('d', function(d) { return 'M'+d.join(',')+'Z'; });
   });
 
+  function updateGraph(data) {
+    data.nodes.forEach(function(d, i) {
+      d.id = i;
+    });
+
+    link = svg.selectAll('.link')
+        .data( data.links )
+      .enter().append('line')
+        .attr('class', 'link')
+        .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+    node = svg.selectAll('.node')
+        .data( data.nodes )
+      .enter().append('g')
+        .attr('title', name)
+        .attr('data-id', function(d, i) {
+          return i;
+        })
+        .attr('data-group', function(d, i) {
+          return d.group;
+        })
+        .attr('class', 'node')
+        .call( force.drag );
+
+    node.append('circle')
+        .attr('r', 30)
+        .attr('fill', colorByGroup)
+        .attr('fill-opacity', 0.5);
+
+    node.append('circle')
+        .attr('r', 4)
+        .attr('stroke', 'black');
+
+    node.on('click', function() {
+      var id = $(this).data("id");
+      var group = $(this).data("group");
+      console.log(id, group, this);
+
+      // New node
+      app.data.nodes.push({
+        name: "new",
+        group: group
+      });
+
+      // Connect new node to the clicked node
+      // app.data.links.push({
+      //   source: id,
+      //   target: app.data.nodes.length,
+      //   value: 0
+      // });
+
+      // force.start();
+    });
+
+    force
+      .nodes( data.nodes )
+      .links( data.links )
+      .start();
+
+    app.data = data;
+  }
+
   d3.json('mini.json', function(err, data) {
     if (data) {
-      data.nodes.forEach(function(d, i) {
-        d.id = i;
-      });
-
-      link = svg.selectAll('.link')
-          .data( data.links )
-        .enter().append('line')
-          .attr('class', 'link')
-          .style("stroke-width", function(d) { return Math.sqrt(d.value); });
-
-      node = svg.selectAll('.node')
-          .data( data.nodes )
-        .enter().append('g')
-          .attr('title', name)
-          .attr('data-id', function(d, i) {
-            return i;
-          })
-          .attr('data-group', function(d, i) {
-            return d.group;
-          })
-          .attr('class', 'node')
-          .call( force.drag );
-
-      node.append('circle')
-          .attr('r', 30)
-          .attr('fill', colorByGroup)
-          .attr('fill-opacity', 0.5);
-
-      node.append('circle')
-          .attr('r', 4)
-          .attr('stroke', 'black');
-
-      node.on('click', function() {
-        var id = $(this).data("id");
-        var group = $(this).data("group");
-        console.log(id, group, this);
-
-        // New node
-        app.data.nodes.push({
-          name: "new",
-          group: group
-        });
-
-        // Connect new node to the clicked node
-        // app.data.links.push({
-        //   source: id,
-        //   target: app.data.nodes.length,
-        //   value: 0
-        // });
-
-        // force.start();
-      });
-
-      force
-          .nodes( data.nodes )
-          .links( data.links )
-          .start();
-
-      app.data = data;
+      updateGraph(data);
     }
   });
 

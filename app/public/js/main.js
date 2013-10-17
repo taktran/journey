@@ -124,7 +124,7 @@
     // Interaction
     // ----------------------------------------
 
-    function addNode(id, group, color) {
+    function addNode(nodeIndex, group, color) {
       var newNodeId = nodes.length - 1, // Last on list
         newNode = {
           id: newNodeId,
@@ -133,7 +133,7 @@
         };
 
       nodes.push(newNode);
-      links.push({source: id, target: newNode});
+      links.push({source: nodeIndex, target: newNode});
 
       if ($("#hardware-check").is(":checked")) {
         primus.write(color);

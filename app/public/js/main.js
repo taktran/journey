@@ -18,6 +18,8 @@
     node = node.data(force.nodes(), function(d) { return d.id;});
     node.enter().append("circle")
       .attr("class", function(d) { return "node " + d.id; })
+      .attr('data-id', function(d, i) { return i; })
+      .attr('data-group', function(d) { return d.group; })
       .attr("r", 8)
       .attr('fill', colorByGroup);
     node.exit().remove();
@@ -57,28 +59,16 @@
       link = svg.selectAll(".link");
 
   // 1. Add three nodes and three links.
-  setTimeout(function() {
-    var a = {id: "a", group: 1}, b = {id: "b", group: 1}, c = {id: "c", group: 2};
+  function init() {
+    var a = {id: "a", group: 1},
+      b = {id: "b", group: 2},
+      c = {id: "c", group: 3};
     nodes.push(a, b, c);
     links.push({source: a, target: b}, {source: a, target: c}, {source: b, target: c});
     start();
-  }, 0);
+  }
 
-  // 2. Remove node B and associated links.
-  setTimeout(function() {
-    nodes.splice(1, 1); // remove b
-    links.shift(); // remove a-b
-    links.pop(); // remove b-c
-    start();
-  }, 3000);
-
-  // Add node B back.
-  setTimeout(function() {
-    var a = nodes[0], b = {id: "b", group: 1}, c = nodes[1];
-    nodes.push(b);
-    links.push({source: a, target: b}, {source: b, target: c});
-    start();
-  }, 6000);
+  init();
 
   app.nodes = nodes;
   app.links = links;
@@ -188,26 +178,16 @@
   // });
 
   $(function() {
-    // $('.node').dblclick(function() {
-    //   var id = $(this).data("id");
-    //   var group = $(this).data("group");
-    //   console.log(id, group, this);
+    $('.node').dblclick(function() {
+      var clickedNode = $(this).data('id'),
+        clickedNodeGroup = $(this).data('group'),
+        newNodeId = nodes.length - 1, // Last on list
+        newNode = {id: newNodeId, group: clickedNodeGroup};
 
-    //   // New node
-    //   app.data.nodes.push({
-    //     name: "new",
-    //     group: group
-    //   });
-
-    //   // Connect new node to the clicked node
-    //   app.data.links.push({
-    //     source: id,
-    //     target: app.data.nodes.length - 1,
-    //     value: 1
-    //   });
-
-    //   updateGraph(app.data);
-    // });
+      nodes.push(newNode);
+      links.push({source: clickedNode, target: newNode});
+      start();
+    });
 
     // Expose data for debugging
     window.app = app;

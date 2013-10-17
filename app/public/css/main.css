@@ -14,3 +14,9 @@ body {
 .link {
   stroke: #999999;
   stroke-opacity: 0.3; }
+
+.controls {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  color: white; }

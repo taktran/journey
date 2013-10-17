@@ -103,7 +103,7 @@
       console.log(rawData);
       var data = JSON.parse(rawData);
 
-      if (data.lightVal) {
+      if ($("#lights-check").is(":checked") && data.lightVal) {
         $(".node").css("opacity", data.lightVal);
       }
     });

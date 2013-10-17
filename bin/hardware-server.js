@@ -2,18 +2,48 @@
 
 'use strict';
 
-var five = require("johnny-five");
+var LIGHTNESS_MIN = 0,
+    LIGHTNESS_MAX = 1.0,
 
-five.Board({
+    LIGHT_SENSOR_MIN = 880,
+    LIGHT_SENSOR_MAX = 1015;
+
+var five = require("johnny-five");
+var Sensor = require("./lib/Sensor");
+
+function inRange(value, valueMin, valueMax, rangeMin, rangeMax) {
+  var valueProportion = Math.abs(value - valueMin) / (valueMax - valueMin),
+    valueMap = (
+      (valueProportion * (rangeMax - rangeMin)) + rangeMin
+    );
+
+  if (valueMap >= rangeMax) {
+    valueMap = rangeMax;
+  }
+
+  if (valueMap <= rangeMin) {
+    valueMap = rangeMin;
+  }
+
+  return valueMap;
+}
+
+var board = five.Board({
   port: "/dev/cu.usbmodem621" // tmac top usb
   // port: "/dev/cu.usbmodem411" // tmac bottom usb
-}).on("ready", function() {
+});
+
+board.on("ready", function() {
 
   // --------------------------------------------
   // Hardware setup
   // --------------------------------------------
 
+  // Light
   var rgb = new five.Led.RGB([ 9, 10, 11 ]);
+
+  // Photo resister
+  var photoResistor = new Sensor("A3", board);
 
   // --------------------------------------------
   // Real time connection
@@ -34,6 +64,24 @@ five.Board({
       console.log(data);
 
       rgb.color(data);
+    });
+
+    // Send low light message
+    photoResistor.on("read", function(value) {
+      var normVal = inRange(value, LIGHT_SENSOR_MIN, LIGHT_SENSOR_MAX, LIGHTNESS_MIN, LIGHTNESS_MAX);
+      var data = {
+        lightVal: normVal
+      };
+
+      // console.log("light:", normVal, "(", value, ")");
+      // Less light -> send message
+      if (normVal < 0.5) {
+        data.lowLight = true;
+      } else {
+        data.lowLight = false;
+      }
+
+      spark.write(data);
     });
   });
 

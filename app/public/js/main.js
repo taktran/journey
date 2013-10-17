@@ -103,7 +103,7 @@
       console.log(rawData);
       var data = JSON.parse(rawData);
 
-      if ($("#lights-check").is(":checked") && data.lightVal) {
+      if ($("#hardware-check").is(":checked") && data.lightVal) {
         $(".node").css("opacity", data.lightVal);
       }
     });
@@ -123,7 +123,7 @@
       nodes.push(newNode);
       links.push({source: id, target: newNode});
 
-      if ($("#lights-check").is(":checked")) {
+      if ($("#hardware-check").is(":checked")) {
         primus.write(color);
       }
 

@@ -2,10 +2,10 @@
 (function (){
   'use strict';
 
-  function group(d) { return d.group; }
+  // function group(d) { return d.group; }
 
-  var color = d3.scale.category10();
-  function colorByGroup(d) { return color(group(d)); }
+  // var color = d3.scale.category10();
+  // function colorByGroup(d) { return color(group(d)); }
 
   function start() {
     link = link.data(force.links(), function(d) { return d.source.id + "-" + d.target.id; });
@@ -17,8 +17,11 @@
       .attr("class", function(d) { return "node " + d.id; })
       .attr('data-id', function(d, i) { return i; })
       .attr('data-group', function(d) { return d.group; })
+      .attr('data-color', function(d) { return d.color; })
       .attr("r", 20)
-      .attr('fill', colorByGroup);
+      .attr('fill', function(d) {
+        return d.color;
+      });
     node.exit().remove();
 
     force.start();
@@ -57,9 +60,9 @@
 
   // 1. Add three nodes and three links.
   function init() {
-    var a = {id: "a", group: 1},
-      b = {id: "b", group: 2},
-      c = {id: "c", group: 3};
+    var a = {id: "a", group: 1, color: '#ff0000'},
+      b = {id: "b", group: 2, color: '#00ff00'},
+      c = {id: "c", group: 3, color: '#0000ff'};
     nodes.push(a, b, c);
     links.push({source: a, target: b}, {source: a, target: c}, {source: b, target: c});
     start();
@@ -107,13 +110,18 @@
     $('.node').dblclick(function() {
       var clickedNode = $(this).data('id'),
         clickedNodeGroup = $(this).data('group'),
+        clickedNodeColor = $(this).data('color'),
         newNodeId = nodes.length - 1, // Last on list
-        newNode = {id: newNodeId, group: clickedNodeGroup};
+        newNode = {
+          id: newNodeId,
+          group: clickedNodeGroup,
+          color: clickedNodeColor
+        };
 
       nodes.push(newNode);
       links.push({source: clickedNode, target: newNode});
 
-      primus.write("hello");
+      primus.write(clickedNodeColor);
 
       start();
     });

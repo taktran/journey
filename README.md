@@ -22,16 +22,25 @@ To run the site using a different livereload port (default is `35729`), use the 
 
     grunt --lrp=35720
 
-## Servers
+## Hardware
 
-To start the hardware server
+To enable the hardware features
 
 1. Set up the arduino
-  * [Photoresister](https://github.com/rwaldron/johnny-five/blob/master/docs/photoresistor.md)
+  * [Photoresister](https://github.com/rwaldron/johnny-five/blob/master/docs/photoresistor.md) (pin A3)
+  * Pressure sensor, with similar set up to photoresister, except on pin A4
   * RGB light - pins 9, 10, 11
-2. Run
+2. Find your arduino port, and update the port in `bin/hardware-server.js` (some machines don't require it though):
+
+        five.Board({
+          port: "port name from"
+        });
+
+3. Start the hardware server
 
         node bin/hardware-server.js
+
+4. Check the `Hardware` check box on the front end to enable features
 
 To start the RGB lights demo
 

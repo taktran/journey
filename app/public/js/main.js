@@ -112,23 +112,30 @@
     // Interaction
     // ----------------------------------------
 
-    $('.node').dblclick(function() {
-      var clickedNode = $(this).data('id'),
-        clickedNodeGroup = $(this).data('group'),
-        clickedNodeColor = $(this).data('color'),
-        newNodeId = nodes.length - 1, // Last on list
+    function addNode(id, group, color) {
+      var newNodeId = nodes.length - 1, // Last on list
         newNode = {
           id: newNodeId,
-          group: clickedNodeGroup,
-          color: clickedNodeColor
+          group: group,
+          color: color
         };
 
       nodes.push(newNode);
-      links.push({source: clickedNode, target: newNode});
+      links.push({source: id, target: newNode});
 
-      primus.write(clickedNodeColor);
+      if ($("#lights-check").is(":checked")) {
+        primus.write(color);
+      }
 
       start();
+    }
+
+    $('.node').dblclick(function() {
+      var clickedNodeId = $(this).data('id'),
+        clickedNodeGroup = $(this).data('group'),
+        clickedNodeColor = $(this).data('color');
+
+      addNode(clickedNodeId, clickedNodeGroup, clickedNodeColor);
     });
 
     // ----------------------------------------

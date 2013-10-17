@@ -17,7 +17,7 @@
       .attr("class", function(d) { return "node " + d.id; })
       .attr('data-id', function(d, i) { return i; })
       .attr('data-group', function(d) { return d.group; })
-      .attr("r", 8)
+      .attr("r", 20)
       .attr('fill', colorByGroup);
     node.exit().remove();
 

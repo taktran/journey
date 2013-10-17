@@ -22,6 +22,19 @@ To run the site using a different livereload port (default is `35729`), use the 
 
     grunt --lrp=35720
 
+## Servers
+
+To start the hardware server
+
+1. Set up the arduino
+2. Run
+
+        node bin/hardware-server.js
+
+To start the RGB lights demo
+
+    node bin/rbg-lights.js
+
 ## Testing
 
 Uses [karma](http://karma-runner.github.io/) and [jasmine](http://pivotal.github.io/jasmine/).

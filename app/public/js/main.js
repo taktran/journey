@@ -1,4 +1,4 @@
-/*global d3*/
+/*global d3, Primus*/
 (function (){
   'use strict';
 
@@ -68,6 +68,42 @@
   init();
 
   $(function() {
+
+    // ----------------------------------------
+    // Web sockets server
+    // ----------------------------------------
+    var PRIMUS_URL = 'http://localhost:9999/',
+        primus = Primus.connect(PRIMUS_URL);
+
+    primus.on('open', function open() {
+      console.log('Connection open');
+    });
+
+    primus.on('error', function error(err) {
+      console.error('Error:', err, err.message);
+    });
+
+    primus.on('reconnect', function () {
+      console.log('Reconnect attempt started');
+    });
+
+    primus.on('reconnecting', function (opts) {
+      console.log('Reconnecting in %d ms', opts.timeout);
+      console.log('This is attempt %d out of %d', opts.attempt, opts.retries);
+    });
+
+    primus.on('end', function () {
+      console.log('Connection closed');
+    });
+
+    primus.on('data', function message(data) {
+      console.log(data);
+    });
+
+    // ----------------------------------------
+    // Interaction
+    // ----------------------------------------
+
     $('.node').dblclick(function() {
       var clickedNode = $(this).data('id'),
         clickedNodeGroup = $(this).data('group'),
@@ -76,10 +112,16 @@
 
       nodes.push(newNode);
       links.push({source: clickedNode, target: newNode});
+
+      primus.write("hello");
+
       start();
     });
 
-    // Expose data for debugging
+    // ----------------------------------------
+    // Debugging
+    // ----------------------------------------
+
     window.app = {
       nodes: nodes,
       links: links

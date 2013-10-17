@@ -2,11 +2,14 @@
 
 'use strict';
 
-var LIGHTNESS_MIN = 0,
-    LIGHTNESS_MAX = 1.0,
+var NORMALIZED_MIN = 0,
+    NORMALIZED_MAX = 1.0,
 
     LIGHT_SENSOR_MIN = 880,
-    LIGHT_SENSOR_MAX = 1015;
+    LIGHT_SENSOR_MAX = 1015,
+
+    PRESSURE_SENSOR_MIN = 50,
+    PRESSURE_SENSOR_MAX = 1023;
 
 var five = require("johnny-five");
 var Sensor = require("./lib/Sensor");
@@ -45,6 +48,9 @@ board.on("ready", function() {
   // Photo resister
   var photoResistor = new Sensor("A3", board);
 
+  // Pressure sensor
+  var pressureSensor = new Sensor("A4", board);
+
   // --------------------------------------------
   // Real time connection
   // --------------------------------------------
@@ -66,19 +72,36 @@ board.on("ready", function() {
       rgb.color(data);
     });
 
-    // Send low light message
+    // Send light data
     photoResistor.on("read", function(value) {
-      var normVal = inRange(value, LIGHT_SENSOR_MIN, LIGHT_SENSOR_MAX, LIGHTNESS_MIN, LIGHTNESS_MAX);
+      var normVal = inRange(value, LIGHT_SENSOR_MIN, LIGHT_SENSOR_MAX, NORMALIZED_MIN, NORMALIZED_MAX);
       var data = {
         lightVal: normVal
       };
 
       // console.log("light:", normVal, "(", value, ")");
-      // Less light -> send message
       if (normVal < 0.5) {
         data.lowLight = true;
       } else {
         data.lowLight = false;
+      }
+
+      spark.write(JSON.stringify(data));
+    });
+
+    // Send pressue sensor data
+    pressureSensor.on("read", function(value) {
+      var normVal = inRange(value, PRESSURE_SENSOR_MIN, PRESSURE_SENSOR_MAX, NORMALIZED_MIN, NORMALIZED_MAX);
+
+      var data = {
+        pressVal: normVal
+      };
+
+      //
+      if (normVal < 0.3) {
+        data.hardPress = true;
+      } else {
+        data.hardPress = false;
       }
 
       spark.write(JSON.stringify(data));

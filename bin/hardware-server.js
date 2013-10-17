@@ -81,7 +81,7 @@ board.on("ready", function() {
         data.lowLight = false;
       }
 
-      spark.write(data);
+      spark.write(JSON.stringify(data));
     });
   });
 

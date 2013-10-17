@@ -99,8 +99,13 @@
       console.log('Connection closed');
     });
 
-    primus.on('data', function message(data) {
-      console.log(data);
+    primus.on('data', function message(rawData) {
+      console.log(rawData);
+      var data = JSON.parse(rawData);
+
+      if (data.lightVal) {
+        $(".node").css("opacity", data.lightVal);
+      }
     });
 
     // ----------------------------------------

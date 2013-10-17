@@ -107,6 +107,16 @@
         if (data.lightVal) {
           $(".node").css("opacity", data.lightVal);
         }
+
+        if (data.hardPress) {
+          // Find random node
+          var randomIndex = Math.floor(Math.random() * nodes.length),
+            randomNode = nodes[randomIndex];
+
+          console.log("Add to", randomIndex, randomNode);
+          // Add to random node
+          addNode(randomIndex, randomNode.group, randomNode.color);
+        }
       }
     });
 

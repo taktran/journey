@@ -27,6 +27,8 @@ To run the site using a different livereload port (default is `35729`), use the 
 To start the hardware server
 
 1. Set up the arduino
+  * [Photoresister](https://github.com/rwaldron/johnny-five/blob/master/docs/photoresistor.md)
+  * RGB light - pins 9, 10, 11
 2. Run
 
         node bin/hardware-server.js

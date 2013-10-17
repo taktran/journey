@@ -103,8 +103,10 @@
       console.log(rawData);
       var data = JSON.parse(rawData);
 
-      if ($("#hardware-check").is(":checked") && data.lightVal) {
-        $(".node").css("opacity", data.lightVal);
+      if ($("#hardware-check").is(":checked")) {
+        if (data.lightVal) {
+          $(".node").css("opacity", data.lightVal);
+        }
       }
     });
 
